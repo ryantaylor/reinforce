@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'debug'
-
 module Reinforce
   class Factory
     BUILDING_COMMANDS = %w[UseAbility].freeze
