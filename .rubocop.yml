@@ -1,0 +1,13 @@
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
+Style/Documentation:
+  Enabled: false
