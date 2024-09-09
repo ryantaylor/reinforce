@@ -74,20 +74,24 @@ module Reinforce
     def rectify_suspects(commands)
       commands.each_with_index do |command, idx|
         next unless command.suspect?
-        # Mark production building legit if the cancel command came more than 3 minutes after construction
-        next command.mark_legit if command.details.production_building? && command.suspect_for > 180.0
-        # Mark other buildings legit (usually triage) if the cancel command came more than 30 seconds after construction
-        next command.mark_legit if !command.details.production_building? && command.suspect_for > 30.0
 
-        building_details = Attributes::Collection.instance.get_by_path(command.details.builds, build: @build_number)
-        remaining = commands[(idx + 1)..]
-        relevant = remaining.take_while { |c| c.pbgid != command.pbgid }
+        if command.details.production_building?
+          # Mark production building legit if the cancel command came more than 3 minutes after construction
+          next command.mark_legit if command.suspect_for > 180.0
 
-        used = relevant.any? do |c|
-          building_details.produces?(c.details.path)
+          building_details = Attributes::Collection.instance.get_by_path(command.details.builds, build: @build_number)
+          remaining = commands[(idx + 1)..]
+          relevant = remaining.take_while { |c| c.pbgid != command.pbgid }
+
+          used = relevant.any? do |c|
+            building_details.produces?(c.details.path)
+          end
+
+          command.mark_legit if used
+        elsif command.suspect_for > 90.0
+          # Mark other buildings legit (usually triage) if the cancel command came more than 90 seconds after construction
+          command.mark_legit
         end
-
-        used ? command.mark_legit : command.cancel
       end
     end
   end
