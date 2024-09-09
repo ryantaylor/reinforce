@@ -5,9 +5,11 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in reinforce.gemspec
 gemspec
 
-ruby '3.2.4'
+ruby '3.3.4'
 
-gem 'memory_profiler'
 gem 'rake'
 gem 'rspec'
 gem 'rubocop'
+gem 'rubocop-performance', require: false
+gem 'rubocop-rake', require: false
+gem 'rubocop-rspec', require: false

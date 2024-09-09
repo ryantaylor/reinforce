@@ -2,18 +2,18 @@
 
 RSpec.describe Reinforce do
   it 'has a version number' do
-    expect(Reinforce::VERSION).not_to be nil
+    expect(Reinforce::VERSION).not_to be_nil
   end
 
   describe '.build_for' do
-    subject(:build_for) { Reinforce.build_for(player, replay.version) }
+    subject(:build_for) { described_class.build_for(player, replay.version) }
 
     let(:bytes) { File.read(path).unpack('C*') }
     let(:replay) { VaultCoh::Replay.from_bytes(bytes) }
-    let(:paths) { build_for.map(&:details).map(&:path) }
+    let(:paths) { build_for.map { |command| command.details.path } }
 
     context 'basic USF Airborne build' do
-      let(:path) { "#{Reinforce.root}/spec/fixtures/replays/usf_airborne_build.rec" }
+      let(:path) { "#{described_class.root}/spec/fixtures/replays/usf_airborne_build.rec" }
       let(:player) { replay.players.first }
       let(:build) do
         %w[sbps/races/american/infantry/engineer_us
@@ -46,12 +46,12 @@ RSpec.describe Reinforce do
           abilities/races/american/auto_build/auto_build_weapon_support_center
           abilities/races/american/auto_build/auto_build_triage_center_us
         ]
-        expect(suspects).to contain_exactly(*expected)
+        expect(suspects).to match_array(expected)
       end
     end
 
     context 'basic USF Armoured build with suspect triage' do
-      let(:path) { "#{Reinforce.root}/spec/fixtures/replays/usf_armoured_build.rec" }
+      let(:path) { "#{described_class.root}/spec/fixtures/replays/usf_armoured_build.rec" }
       let(:player) { replay.players.first }
       let(:build) do
         %w[abilities/races/american/auto_build/auto_build_barracks
@@ -87,13 +87,14 @@ RSpec.describe Reinforce do
           abilities/races/american/auto_build/auto_build_barracks
           abilities/races/american/auto_build/auto_build_tank_depot
           abilities/races/american/auto_build/auto_build_triage_center_us
+          abilities/races/american/auto_build/auto_build_triage_center_us
         ]
-        expect(suspects).to contain_exactly(*expected)
+        expect(suspects).to match_array(expected)
       end
     end
 
     context 'basic USF Advanced Infantry build with suspect clearing over time test' do
-      let(:path) { "#{Reinforce.root}/spec/fixtures/replays/usf_advanced_inf_build.rec" }
+      let(:path) { "#{described_class.root}/spec/fixtures/replays/usf_advanced_inf_build.rec" }
       let(:player) { replay.players.first }
       let(:build) do
         %w[abilities/races/american/auto_build/auto_build_barracks
@@ -116,9 +117,13 @@ RSpec.describe Reinforce do
         expect(paths).to eq(build)
       end
 
-      it 'marks nothing suspect' do
+      it 'marks some buildings as suspect' do
         suspects = build_for.select(&:suspect?).map(&:details).map(&:path)
-        expect(suspects).to be_empty
+        expected = %w[
+          abilities/races/american/auto_build/auto_build_weapon_support_center
+          abilities/races/american/auto_build/auto_build_triage_center_us
+        ]
+        expect(suspects).to match_array(expected)
       end
     end
   end

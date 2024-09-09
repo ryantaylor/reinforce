@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = 'A tool for extracting accurate build orders from Company of Heroes 3 replay files.'
   spec.homepage = 'https://github.com/ryantaylor/reinforce'
   spec.license = 'MIT'
-  spec.required_ruby_version = '>= 3.2.0'
+  spec.required_ruby_version = '>= 3.1.0'
 
   spec.metadata['allowed_push_host'] = "TODO: Set to your gem server 'https://example.com'"
 

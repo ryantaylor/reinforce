@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'objspace'
-
 module Reinforce
   module Attributes
     class Collection
@@ -14,25 +12,7 @@ module Reinforce
 
       class << self
         def generate_for(klass)
-          collection = new
-          data_path = File.join(Reinforce.root, 'data')
-
-          Dir.chdir(data_path) do
-            Dir.glob('*').select { |f| File.directory?(f) }.each do |dir|
-              file_path = File.join(dir, klass::FILENAME)
-              next unless File.exist?(file_path)
-
-              data = klass.load_from_file(file_path)
-              collection.populate(dir, data, rehash: false)
-
-              # # load data for the build into a hash keyed to pbgid
-              # data[dir] = klass.load_from_file(klass::FILENAME).to_h { |o| [o.pbgid, o] }
-              # # filter out duplicate/unchanged attributes
-              # data[dir].reject! { |k, o| o == latest[k] }
-              # # update latest attributes for next check
-              # latest[dir] = (latest[dir] || {}).merge(data[dir])
-            end
-          end
+          collection = load_from_data(klass)
 
           collection.rehash_all
 
@@ -74,6 +54,25 @@ module Reinforce
           collection.rehash_all
           collection
         end
+
+      private
+
+        def load_from_data(klass)
+          collection = new
+          data_path = File.join(Reinforce.root, 'data')
+
+          Dir.chdir(data_path) do
+            Dir.glob('*').select { |f| File.directory?(f) }.each do |dir|
+              file_path = File.join(dir, klass::FILENAME)
+              next unless File.exist?(file_path)
+
+              data = klass.load_from_file(file_path)
+              collection.populate(dir, data, rehash: false)
+            end
+          end
+
+          collection
+        end
       end
 
       def get_by_pbgid(pbgid, build: LATEST_BUILD)
@@ -91,10 +90,8 @@ module Reinforce
       end
 
       def populate(build, data, rehash: true)
-        @pbgid_keyed[build.to_i] ||= {}
-        @pbgid_keyed[build.to_i] = @pbgid_keyed[build.to_i].merge(data.to_h { |o| [o.pbgid, o] })
-        @path_keyed[build.to_i] ||= {}
-        @path_keyed[build.to_i] = @path_keyed[build.to_i].merge(data.to_h { |o| [o.path, o] })
+        populate_pbgid_hash(build, data)
+        populate_path_hash(build, data)
 
         rehash_all if rehash
         true
@@ -114,6 +111,16 @@ module Reinforce
       end
 
     private
+
+      def populate_pbgid_hash(build, data)
+        @pbgid_keyed[build.to_i] ||= {}
+        @pbgid_keyed[build.to_i] = @pbgid_keyed[build.to_i].merge(data.to_h { |o| [o.pbgid, o] })
+      end
+
+      def populate_path_hash(build, data)
+        @path_keyed[build.to_i] ||= {}
+        @path_keyed[build.to_i] = @path_keyed[build.to_i].merge(data.to_h { |o| [o.path, o] })
+      end
 
       def first_build
         @pbgid_keyed.keys.min

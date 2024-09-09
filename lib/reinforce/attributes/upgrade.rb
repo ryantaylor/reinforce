@@ -5,10 +5,6 @@ module Reinforce
     class Upgrade < Base
       FILENAME = 'upgrade.json'
 
-      def initialize(path:, pbgid:, locstring:, icon_name:)
-        super
-      end
-
       class << self
       private
 

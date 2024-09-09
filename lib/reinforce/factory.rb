@@ -71,28 +71,22 @@ module Reinforce
       build.sort_by(&:tick)
     end
 
+    # rubocop:disable Metrics/AbcSize
     def rectify_suspects(commands)
       commands.each_with_index do |command, idx|
         next unless command.suspect?
 
-        if command.details.production_building?
-          # Mark production building legit if the cancel command came more than 3 minutes after construction
-          next command.mark_legit if command.suspect_for > 180.0
+        building_details = Attributes::Collection.instance.get_by_path(command.details.builds, build: @build_number)
+        remaining = commands[(idx + 1)..]
+        relevant = remaining.take_while { |c| c.pbgid != command.pbgid }
 
-          building_details = Attributes::Collection.instance.get_by_path(command.details.builds, build: @build_number)
-          remaining = commands[(idx + 1)..]
-          relevant = remaining.take_while { |c| c.pbgid != command.pbgid }
-
-          used = relevant.any? do |c|
-            building_details.produces?(c.details.path)
-          end
-
-          command.mark_legit if used
-        elsif command.suspect_for > 90.0
-          # Mark other buildings legit (usually triage) if the cancel command came more than 90 seconds after construction
-          command.mark_legit
+        used = relevant.any? do |c|
+          building_details.produces?(c.details.path)
         end
+
+        command.mark_legit if used
       end
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end

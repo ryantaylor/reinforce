@@ -5,13 +5,6 @@ module Reinforce
     class Squad < Base
       FILENAME = 'sbps.json'
 
-      def initialize(path:, pbgid:, locstring:, icon_name:)
-        @path = path
-        @pbgid = pbgid
-        @locstring = locstring
-        @icon_name = icon_name
-      end
-
       class << self
       private
 

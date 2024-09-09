@@ -4,6 +4,7 @@ module Reinforce
   class Command
     attr_reader :action_type, :tick, :pbgid, :source, :index, :details
 
+    # rubocop:disable Metrics/AbcSize
     def initialize(command_hash, build_number)
       @action_type = command_hash.keys.first
       @tick = command_hash.values.first[:tick]
@@ -12,9 +13,9 @@ module Reinforce
       @index = command_hash.values.first[:queue_index]
       @details = Attributes::Collection.instance.get_by_pbgid(@pbgid, build: build_number)
       @cancelled = false
-      @suspect = false
       @suspect_from_tick = nil
     end
+    # rubocop:enable Metrics/AbcSize
 
     def cancelled?
       @cancelled
@@ -25,23 +26,19 @@ module Reinforce
     end
 
     def suspect?
-      @suspect
+      !@suspect_from_tick.nil?
     end
 
     def mark_suspect(tick)
-      @suspect = true
       @suspect_from_tick = tick
     end
 
     def mark_legit
-      @suspect = false
       @suspect_from_tick = nil
     end
 
-    def suspect_for
-      return nil unless suspect?
-
-      (@suspect_from_tick - @tick) / 8.0
+    def suspect_since
+      @suspect_from_tick
     end
 
     def as_json(_options)
