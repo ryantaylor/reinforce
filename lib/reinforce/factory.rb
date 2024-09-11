@@ -6,7 +6,8 @@ module Reinforce
     PRODUCTION_COMMANDS = %w[BuildSquad BuildGlobalUpgrade].freeze
     BATTLEGROUP_COMMANDS = %w[SelectBattlegroup SelectBattlegroupAbility UseBattlegroupAbility].freeze
     CANCEL_COMMANDS = %w[CancelConstruction CancelProduction].freeze
-    ALL_COMMANDS = BUILDING_COMMANDS + PRODUCTION_COMMANDS + BATTLEGROUP_COMMANDS + CANCEL_COMMANDS
+    AI_COMMANDS = %w[AITakeover].freeze
+    ALL_COMMANDS = BUILDING_COMMANDS + PRODUCTION_COMMANDS + BATTLEGROUP_COMMANDS + CANCEL_COMMANDS + AI_COMMANDS
 
     def initialize(player, build_number)
       @player = player.to_h
@@ -14,10 +15,11 @@ module Reinforce
       @buildings = []
       @productions = {}
       @battlegroup = []
+      @takeover = []
     end
 
     def build(with_cancellations: false)
-      commands.each { |c| classify_command(c) }
+      commands.each { |c| break if classify_command(c) == false }
       result = consolidate
       result = rectify_suspects(result)
       result = result.reject(&:cancelled?) unless with_cancellations
@@ -40,16 +42,22 @@ module Reinforce
         classify_battlegroup_command(command)
       elsif CANCEL_COMMANDS.include?(command.action_type)
         process_cancellation(command)
+      elsif AI_COMMANDS.include?(command.action_type)
+        process_takeover(command)
       end
     end
 
     def classify_building_command(command)
       @buildings << command if command.details.autobuild?
+
+      true
     end
 
     def classify_production_command(command)
       @productions[command.source] ||= []
       @productions[command.source] << command
+
+      true
     end
 
     def classify_battlegroup_command(command)
@@ -58,6 +66,8 @@ module Reinforce
       else
         @battlegroup << command
       end
+
+      true
     end
 
     def process_cancellation(command)
@@ -66,10 +76,18 @@ module Reinforce
       else
         @productions[command.source][command.index - 1].cancel
       end
+
+      true
+    end
+
+    def process_takeover(command)
+      @takeover << command
+
+      false
     end
 
     def consolidate
-      build = @buildings + @battlegroup + @productions.values.flatten
+      build = @buildings + @battlegroup + @takeover + @productions.values.flatten
       build.sort_by(&:tick)
     end
 

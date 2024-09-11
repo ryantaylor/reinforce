@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    reinforce (0.1.1)
-      vault_coh (~> 6)
+    reinforce (0.2.0)
+      vault_coh (~> 6.2)
 
 GEM
   remote: https://rubygems.org/
@@ -53,7 +53,7 @@ GEM
       rubocop (~> 1.61)
     ruby-progressbar (1.13.0)
     unicode-display_width (2.5.0)
-    vault_coh (6.1.0)
+    vault_coh (6.2.0)
 
 PLATFORMS
   arm64-darwin-23
