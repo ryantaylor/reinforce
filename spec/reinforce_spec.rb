@@ -30,7 +30,10 @@ RSpec.describe Reinforce do
            upgrade/american/battlegroups/airborne/airborne_left_1b_recon_loiter_us
            upgrade/american/battlegroups/airborne/airborne_left_2a_supply_drop_us
            upgrade/american/battlegroups/airborne/airborne_left_3b_carpet_bombing_run_us
+           abilities/races/american/battlegroups/airborne/airborne_left_1b_recon_loiter_us
            upgrade/american/research/infantry_support_center/field_support_us
+           abilities/races/american/battlegroups/airborne/airborne_left_2b_supply_drop_us
+           abilities/races/american/battlegroups/airborne/airborne_left_3b_carpet_bombing_us
            abilities/races/american/auto_build/auto_build_triage_center_us
            abilities/races/american/auto_build/auto_build_triage_center_us]
       end
@@ -105,11 +108,14 @@ RSpec.describe Reinforce do
            sbps/races/american/infantry/riflemen_us
            upgrade/american/battlegroups/infantry/infantry_left_2a_frontline_medical_tent_us
            abilities/races/american/battlegroups/infantry/infantry_left_1_rifleman_convert_to_ranger_us
+           abilities/races/american/battlegroups/infantry/infantry_left_2a_medical_tent
            sbps/races/american/infantry/engineer_us
            upgrade/american/battlegroups/infantry/infantry_left_3b_infantry_assault_us
+           abilities/races/american/battlegroups/infantry/infantry_left_3b_infantry_assault_us
            upgrade/american/battlegroups/infantry/infantry_right_1a_artillery_observers_us
            upgrade/american/battlegroups/infantry/infantry_right_2_howitzer_105mm_us
            upgrade/american/battlegroups/infantry/infantry_right_3a_off_map_artillery_us
+           abilities/races/american/battlegroups/infantry/infantry_right_3a_off_map_artillery_us
            abilities/races/american/auto_build/auto_build_triage_center_us]
       end
 
@@ -121,6 +127,7 @@ RSpec.describe Reinforce do
         suspects = build_for.select(&:suspect?).map(&:details).map(&:path)
         expected = %w[
           abilities/races/american/auto_build/auto_build_weapon_support_center
+          abilities/races/american/battlegroups/infantry/infantry_left_2a_medical_tent
           abilities/races/american/auto_build/auto_build_triage_center_us
         ]
         expect(suspects).to match_array(expected)

@@ -3,6 +3,10 @@
 module Reinforce
   module Attributes
     class Ability < Base
+      AUTOBUILDS = %w[
+        abilities/races/american/battlegroups/infantry/infantry_left_2a_medical_tent
+      ].freeze
+
       SPAWNERS = %w[
         armored_support_flame_p3_ak
         armored_support_command_p4_ak
@@ -110,7 +114,7 @@ module Reinforce
       end
 
       def autobuild?
-        @path.include?('auto_build') || @path.include?('autobuild')
+        @path.include?('auto_build') || @path.include?('autobuild') || AUTOBUILDS.include?(path)
       end
 
       def production_building?

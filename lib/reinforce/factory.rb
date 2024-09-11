@@ -53,9 +53,11 @@ module Reinforce
     end
 
     def classify_battlegroup_command(command)
-      return if command.details.respond_to?(:spawner?) && !command.details.spawner?
-
-      @battlegroup << command
+      if command.details.respond_to?(:autobuild?) && command.details.autobuild?
+        @buildings << command
+      else
+        @battlegroup << command
+      end
     end
 
     def process_cancellation(command)
