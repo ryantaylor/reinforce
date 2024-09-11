@@ -17,7 +17,7 @@ module Reinforce
           collection.rehash_all
 
           generation_path = File.join(Reinforce.root, 'generated', klass::FILENAME)
-          File.write(generation_path, JSON.pretty_generate(collection))
+          File.write(generation_path, JSON.generate(collection))
 
           true
         end
