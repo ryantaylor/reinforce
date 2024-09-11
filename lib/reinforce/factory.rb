@@ -81,6 +81,8 @@ module Reinforce
     end
 
     def process_takeover(command)
+      return true unless @player[:human]
+
       @takeover << command
 
       false
