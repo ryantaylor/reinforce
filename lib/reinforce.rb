@@ -25,14 +25,14 @@ module Reinforce
   end
 
   # Parses data into structures for build order generation
-  def self.generate
+  def self.generate(pretty: false)
     [
       Attributes::Ability,
       Attributes::Entity,
       Attributes::Squad,
       Attributes::Upgrade
     ].each do |klass|
-      Attributes::Collection.generate_for(klass)
+      Attributes::Collection.generate_for(klass, pretty:)
     end
   end
 end

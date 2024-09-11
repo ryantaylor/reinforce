@@ -11,13 +11,14 @@ module Reinforce
       end
 
       class << self
-        def generate_for(klass)
+        def generate_for(klass, pretty: false)
           collection = load_from_data(klass)
 
           collection.rehash_all
 
           generation_path = File.join(Reinforce.root, 'generated', klass::FILENAME)
-          File.write(generation_path, JSON.generate(collection))
+          json = pretty ? JSON.pretty_generate(collection) : JSON.generate(collection)
+          File.write(generation_path, json)
 
           true
         end
