@@ -80,14 +80,48 @@ module Reinforce
         return nil if build.nil?
 
         build = last_build if build == LATEST_BUILD
-        @pbgid_keyed.dig(build, pbgid) || get_by_pbgid(pbgid, build: previous_build_for(build))
+
+        cursor = build
+        until cursor.nil?
+          value = @pbgid_keyed.dig(cursor, pbgid)
+          return value unless value.nil?
+
+          cursor = previous_build_for(cursor)
+        end
+
+        cursor = next_build_for(build)
+        until cursor.nil?
+          value = @pbgid_keyed.dig(cursor, pbgid)
+          return value unless value.nil?
+
+          cursor = next_build_for(cursor)
+        end
+
+        nil
       end
 
       def get_by_path(path, build: LATEST_BUILD)
         return nil if build.nil?
 
         build = last_build if build == LATEST_BUILD
-        @path_keyed.dig(build, path) || get_by_path(path, build: previous_build_for(build))
+
+        cursor = build
+        until cursor.nil?
+          value = @path_keyed.dig(cursor, path)
+          return value unless value.nil?
+
+          cursor = previous_build_for(cursor)
+        end
+
+        cursor = next_build_for(build)
+        until cursor.nil?
+          value = @path_keyed.dig(cursor, path)
+          return value unless value.nil?
+
+          cursor = next_build_for(cursor)
+        end
+
+        nil
       end
 
       def populate(build, data, rehash: true)
@@ -133,6 +167,10 @@ module Reinforce
 
       def previous_build_for(build)
         @pbgid_keyed.keys.sort.reverse.find { |b| b < build }
+      end
+
+      def next_build_for(build)
+        @pbgid_keyed.keys.sort.find { |b| b > build }
       end
 
       def rehash(hash)
