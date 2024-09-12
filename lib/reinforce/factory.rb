@@ -94,6 +94,7 @@ module Reinforce
     end
 
     # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
     def rectify_suspects(commands)
       commands.each_with_index do |command, idx|
         next unless command.suspect?
@@ -109,6 +110,7 @@ module Reinforce
         command.mark_legit if used
       end
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
     # rubocop:enable Metrics/AbcSize
   end
 end
