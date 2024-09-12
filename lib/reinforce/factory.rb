@@ -95,6 +95,7 @@ module Reinforce
 
     # rubocop:disable Metrics/AbcSize
     # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/PerceivedComplexity
     def rectify_suspects(commands)
       commands.each_with_index do |command, idx|
         next unless command.suspect?
@@ -104,12 +105,13 @@ module Reinforce
         relevant = remaining.take_while { |c| c.pbgid != command.pbgid }
 
         used = relevant.any? do |c|
-          building_details&.produces?(c.details.path)
+          building_details&.produces?(c.details&.path)
         end
 
         command.mark_legit if used
       end
     end
+    # rubocop:enable Metrics/PerceivedComplexity
     # rubocop:enable Metrics/CyclomaticComplexity
     # rubocop:enable Metrics/AbcSize
   end
