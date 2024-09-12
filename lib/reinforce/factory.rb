@@ -48,7 +48,7 @@ module Reinforce
     end
 
     def classify_building_command(command)
-      @buildings << command if command.details.autobuild?
+      @buildings << command if command.details&.autobuild?
 
       true
     end
@@ -98,12 +98,12 @@ module Reinforce
       commands.each_with_index do |command, idx|
         next unless command.suspect?
 
-        building_details = Attributes::Collection.instance.get_by_path(command.details.builds, build: @build_number)
+        building_details = Attributes::Collection.instance.get_by_path(command.details&.builds, build: @build_number)
         remaining = commands[(idx + 1)..]
         relevant = remaining.take_while { |c| c.pbgid != command.pbgid }
 
         used = relevant.any? do |c|
-          building_details.produces?(c.details.path)
+          building_details&.produces?(c.details.path)
         end
 
         command.mark_legit if used

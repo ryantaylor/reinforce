@@ -17,7 +17,7 @@ Metrics/ClassLength:
   Enabled: false
 
 Metrics/MethodLength:
-  Max: 15
+  Max: 20
 
 Metrics/ParameterLists:
   Max: 10

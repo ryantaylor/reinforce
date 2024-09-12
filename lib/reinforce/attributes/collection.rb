@@ -97,6 +97,8 @@ module Reinforce
           cursor = next_build_for(cursor)
         end
 
+        Reinforce.logger.error("no data for pbgid #{pbgid} build #{build}")
+
         nil
       end
 
@@ -120,6 +122,8 @@ module Reinforce
 
           cursor = next_build_for(cursor)
         end
+
+        Reinforce.logger.error("no data for path #{path} build #{build}")
 
         nil
       end

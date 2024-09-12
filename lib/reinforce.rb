@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'logger'
+
 require_relative 'reinforce/attributes/base'
 
 require_relative 'reinforce/attributes/ability'
@@ -17,6 +19,12 @@ require_relative 'reinforce/version'
 module Reinforce
   def self.root
     File.expand_path('../', File.dirname(__FILE__))
+  end
+
+  def self.logger
+    @logger ||= Logger.new($stdout).tap do |logger|
+      logger.progname = name
+    end
   end
 
   # Takes a Vault Player and generates a build order
