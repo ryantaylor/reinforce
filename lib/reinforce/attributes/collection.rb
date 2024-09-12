@@ -76,8 +76,10 @@ module Reinforce
         end
       end
 
+      # rubocop:disable Metrcs/AbcSize
+      # rubocop:disable Metrics/CyclomaticComplexity
       def get_by_pbgid(pbgid, build: LATEST_BUILD)
-        return nil if build.nil?
+        return nil if build.nil? || pbgid.nil?
 
         build = last_build if build == LATEST_BUILD
 
@@ -103,7 +105,7 @@ module Reinforce
       end
 
       def get_by_path(path, build: LATEST_BUILD)
-        return nil if build.nil?
+        return nil if build.nil? || path.nil?
 
         build = last_build if build == LATEST_BUILD
 
@@ -127,6 +129,8 @@ module Reinforce
 
         nil
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrcs/AbcSize
 
       def populate(build, data, rehash: true)
         populate_pbgid_hash(build, data)
