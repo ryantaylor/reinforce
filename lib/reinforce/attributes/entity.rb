@@ -32,11 +32,7 @@ module Reinforce
         end
 
         def parse_extensions(data, path)
-          locstring = parse_locstring(data)
-
-          return if locstring.nil? || locstring == '0'
-
-          new(locstring:,
+          new(locstring: parse_locstring(data),
               icon_name: parse_icon_name(data),
               path:,
               spawns: parse_spawns(data),
@@ -51,7 +47,7 @@ module Reinforce
 
         def parse_icon_name(data)
           ext_data = data['extensions'].find { |ext| ext['exts'].key?('screen_name') }
-          ext_data.dig('exts', 'icon_name')
+          ext_data&.dig('exts', 'icon_name')
         end
 
         def parse_spawns(data)

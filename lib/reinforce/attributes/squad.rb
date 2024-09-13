@@ -26,10 +26,7 @@ module Reinforce
         def parse_extensions(data, path)
           squad_data = squad_data_from(data)
           locstring = squad_data&.dig('race_data', 'info', 'screen_name', 'locstring', 'value')
-
-          return if locstring.nil? || locstring == '0'
-
-          icon_name = squad_data.dig('race_data', 'info', 'icon_name')
+          icon_name = squad_data&.dig('race_data', 'info', 'icon_name')
 
           new(locstring:,
               icon_name:,

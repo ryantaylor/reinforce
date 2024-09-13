@@ -25,9 +25,6 @@ module Reinforce
 
         def parse_upgrade_bag(data, path)
           locstring = data.dig('upgrade_bag', 'ui_info', 'screen_name', 'locstring', 'value')
-
-          return if locstring.nil? || locstring == '0'
-
           icon_name = data.dig('upgrade_bag', 'ui_info', 'icon_name')
 
           new(locstring:,

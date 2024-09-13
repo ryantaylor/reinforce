@@ -99,9 +99,6 @@ module Reinforce
 
         def parse_ability_bag(data, path)
           locstring = data.dig('ability_bag', 'ui_info', 'screen_name', 'locstring', 'value')
-
-          return if locstring.nil? || locstring == '0'
-
           icon_name = data.dig('ability_bag', 'ui_info', 'icon_name')
           builds = data.dig('ability_bag', 'cursor_ghost_ebp', 'instance_reference')
 
