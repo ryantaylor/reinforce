@@ -20,6 +20,8 @@ module Reinforce
     # rubocop:enable Metrics/AbcSize
 
     def pbgid
+      return if @pbgid.nil?
+
       Reinforce.logger.warn("pbgid #{@pbgid} will overflow a 4-byte signed int") if @pbgid > PBGID_MAX
 
       @pbgid
