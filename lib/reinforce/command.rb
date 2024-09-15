@@ -11,7 +11,7 @@ module Reinforce
       @pbgid = command_hash.values.first[:pbgid]
       @source = command_hash.values.first[:source_identifier]
       @index = command_hash.values.first[:queue_index]
-      @details = Attributes::Collection.instance.get_by_pbgid(@pbgid, build: build_number)
+      @details = Reinforce.dictionary.get_by_pbgid(@pbgid, build: build_number)
       @cancelled = false
       @suspect_from_tick = nil
     end

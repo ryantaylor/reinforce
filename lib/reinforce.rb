@@ -12,6 +12,7 @@ require_relative 'reinforce/attributes/upgrade'
 require_relative 'reinforce/attributes/collection'
 
 require_relative 'reinforce/command'
+require_relative 'reinforce/dictionary'
 require_relative 'reinforce/factory'
 
 require_relative 'reinforce/version'
@@ -30,6 +31,10 @@ module Reinforce
   # Takes a Vault Player and generates a build order
   def self.build_for(player, build_number, with_cancellations: false)
     Factory.new(player, build_number).build(with_cancellations:)
+  end
+
+  def self.dictionary
+    Dictionary.instance
   end
 
   # Parses data into structures for build order generation

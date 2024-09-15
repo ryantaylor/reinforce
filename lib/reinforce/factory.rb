@@ -100,7 +100,7 @@ module Reinforce
       commands.each_with_index do |command, idx|
         next unless command.suspect?
 
-        building_details = Attributes::Collection.instance.get_by_path(command.details&.builds, build: @build_number)
+        building_details = Reinforce.dictionary.get_by_path(command.details&.builds, build: @build_number)
         remaining = commands[(idx + 1)..]
         relevant = remaining.take_while { |c| c.pbgid != command.pbgid }
 
