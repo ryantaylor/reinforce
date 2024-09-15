@@ -2,7 +2,9 @@
 
 module Reinforce
   class Command
-    attr_reader :action_type, :tick, :pbgid, :source, :index, :details
+    attr_reader :action_type, :tick, :source, :index, :details
+
+    PBGID_MAX = 2_147_483_648
 
     # rubocop:disable Metrics/AbcSize
     def initialize(command_hash, build_number)
@@ -16,6 +18,12 @@ module Reinforce
       @suspect_from_tick = nil
     end
     # rubocop:enable Metrics/AbcSize
+
+    def pbgid
+      Reinforce.logger.warn("pbgid #{@pbgid} will overflow a 4-byte signed int") if @pbgid > PBGID_MAX
+
+      @pbgid
+    end
 
     def cancelled?
       @cancelled
