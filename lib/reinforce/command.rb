@@ -2,7 +2,7 @@
 
 module Reinforce
   class Command
-    attr_reader :action_type, :tick, :source, :index, :details
+    attr_reader :action_type, :tick, :source, :queue_index, :index, :details
 
     PBGID_MAX = 2_147_483_648
 
@@ -12,7 +12,8 @@ module Reinforce
       @tick = command_hash.values.first[:tick]
       @pbgid = command_hash.values.first[:pbgid]
       @source = command_hash.values.first[:source_identifier]
-      @index = command_hash.values.first[:queue_index]
+      @queue_index = command_hash.values.first[:queue_index]
+      @index = command_hash.values.first[:index]
       @details = Reinforce.dictionary.get_by_pbgid(@pbgid, build: build_number)
       @cancelled = false
       @suspect_from_tick = nil

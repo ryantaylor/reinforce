@@ -74,7 +74,7 @@ module Reinforce
       if command.action_type == 'CancelConstruction'
         @buildings.reject(&:suspect?).each { |building| building.mark_suspect(command.tick) }
       else
-        @productions[command.source][command.index - 1].cancel
+        @productions[command.source][command.queue_index - 1].cancel
       end
 
       true
@@ -90,7 +90,11 @@ module Reinforce
 
     def consolidate
       build = @buildings + @battlegroup + @takeover + @productions.values.flatten
-      build.sort_by(&:tick)
+      build.sort do |a, b|
+        order = a.tick <=> b.tick
+        order = a.index <=> b.index if order.zero?
+        order
+      end
     end
 
     # rubocop:disable Metrics/AbcSize

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    reinforce (0.3.2)
+    reinforce (0.4.0)
       vault_coh (~> 6.2)
 
 GEM
