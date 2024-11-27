@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in reinforce.gemspec
 gemspec
 
-ruby '3.3.4'
+ruby '3.3.5'
 
 gem 'rake'
 gem 'rspec'
