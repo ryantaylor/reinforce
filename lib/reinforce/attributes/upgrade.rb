@@ -13,12 +13,16 @@ module Reinforce
         end
 
         def parse_subtree(data, key)
+          return unless data.is_a?(Hash)
+
           data.flat_map do |k, tree|
-            new_key = key + [k]
-            if tree.key?('upgrade_bag')
-              parse_upgrade_bag(tree, new_key)
-            else
-              parse_subtree(tree, new_key)
+            if tree.is_a?(Hash)
+              new_key = key + [k]
+              if tree.key?('upgrade_bag')
+                parse_upgrade_bag(tree, new_key)
+              else
+                parse_subtree(tree, new_key)
+              end
             end
           end.compact
         end
