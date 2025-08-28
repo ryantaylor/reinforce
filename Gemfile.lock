@@ -62,7 +62,7 @@ GEM
     unicode-display_width (3.1.5)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    vault_coh (6.2.5)
+    vault_coh (6.3.0)
 
 PLATFORMS
   arm64-darwin-23
