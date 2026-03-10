@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    reinforce (0.4.5)
+    reinforce (0.4.6)
       vault_coh (~> 6.2)
 
 GEM
@@ -88,7 +88,7 @@ DEPENDENCIES
   rubocop-rspec
 
 RUBY VERSION
-   ruby 3.4.5p51
+  ruby 3.4.5p51
 
 BUNDLED WITH
-   4.0.5
+  4.0.5
