@@ -21,9 +21,7 @@ module Reinforce
           dir = File.dirname(path)
           bg_path = File.join(dir, ::Reinforce::Attributes::Battlegroup::FILENAME)
           ::Reinforce::Attributes::Battlegroup.load_from_file(bg_path)
-                                              .each_with_object({}) do |bg, acc|
-            acc[bg.activation_upgrade] = bg.locstring
-          end
+                                              .to_h { |bg| [bg.activation_upgrade, bg.locstring] }
         end
 
         def parse(data, battlegroups)
