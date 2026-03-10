@@ -5,6 +5,7 @@ require 'logger'
 require_relative 'reinforce/attributes/base'
 
 require_relative 'reinforce/attributes/ability'
+require_relative 'reinforce/attributes/battlegroup'
 require_relative 'reinforce/attributes/entity'
 require_relative 'reinforce/attributes/squad'
 require_relative 'reinforce/attributes/upgrade'
